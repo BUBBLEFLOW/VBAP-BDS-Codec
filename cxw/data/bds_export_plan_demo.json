@@ -1,0 +1,39 @@
+{
+  "plan_id": "cxw_bds_export_plan_v0",
+  "target_app": "JUCE audio app",
+  "language": "C++17",
+  "real_bds_export_condition": "Build with -DCXW_HAS_BDS_CODEC=ON and provide a platform-matched bds-codec package.",
+  "inputs": {
+    "scene_json": "cxw/data/cxw_demo_scene.bds.json",
+    "speaker_layout": "cxw/data/speaker_layout_4_0_bds.json",
+    "pcm_tracks": [
+      { "track_id": 1, "name": "bass", "layout": "interleaved_f32", "sample_rate": 48000, "channel_count": 2 },
+      { "track_id": 2, "name": "drums", "layout": "interleaved_f32", "sample_rate": 48000, "channel_count": 2 },
+      { "track_id": 3, "name": "music", "layout": "interleaved_f32", "sample_rate": 48000, "channel_count": 2 },
+      { "track_id": 4, "name": "vocal", "layout": "interleaved_f32", "sample_rate": 48000, "channel_count": 2 }
+    ]
+  },
+  "bds_codec_calls": [
+    { "order": 1, "call": "bds::scene_json::parse(sceneJson, &scene, &error)", "purpose": "parse BDS scene JSON" },
+    { "order": 2, "call": "bds::validateScene(scene, &error)", "purpose": "verify track/element/mix references" },
+    { "order": 3, "call": "bds::EncodeSession encoder", "purpose": "create encoder" },
+    { "order": 4, "call": "encoder.setScene(scene)", "purpose": "bind scene metadata" },
+    { "order": 5, "call": "encoder.setTrackPcm(trackId, pcm, frameCount, 48000, 2)", "purpose": "push each stereo stem" },
+    { "order": 6, "call": "encoder.finish(outputPath)", "purpose": "write BDS container" }
+  ],
+  "outputs": {
+    "real_file": "cxw_demo.bds",
+    "dry_run_bundle": "bds_export_dryrun/",
+    "dry_run_manifest": "bds_export_manifest.json"
+  },
+  "bds_format_constraints": {
+    "sample_rate": 48000,
+    "timebase": 48000,
+    "codec_id": "opus",
+    "frame_duration_ticks": 960,
+    "frame_duration_ms": 20,
+    "nominal_bitrate": 128000,
+    "track_count": 4,
+    "speaker_count_for_preview": 4
+  }
+}

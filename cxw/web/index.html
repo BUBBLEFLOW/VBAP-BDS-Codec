@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CXW Edge Spatial Demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172026;
+      --muted: #66737c;
+      --line: #d7dde1;
+      --panel: #ffffff;
+      --paper: #f4f6f5;
+      --front: #0f766e;
+      --right: #2563eb;
+      --left: #c2410c;
+      --accent: #b91c1c;
+      --gold: #b7791f;
+      --shadow: 0 12px 30px rgba(17, 24, 39, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      padding: 22px 28px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfb;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 8px;
+      align-items: center;
+      justify-content: end;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: #2b3840;
+      white-space: nowrap;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(460px, 1fr) 410px;
+      gap: 18px;
+      padding: 18px;
+      min-height: 0;
+    }
+
+    .stage-panel,
+    .side-panel,
+    .info-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .stage-panel {
+      display: grid;
+      grid-template-rows: auto minmax(360px, 1fr) auto;
+      min-height: 620px;
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .toolbar strong {
+      font-size: 14px;
+    }
+
+    .toolbar small {
+      display: block;
+      color: var(--muted);
+      margin-top: 2px;
+      font-size: 12px;
+    }
+
+    .file-load {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    input[type="file"] {
+      max-width: 190px;
+      font-size: 12px;
+    }
+
+    .canvas-wrap {
+      position: relative;
+      min-height: 360px;
+      background:
+        linear-gradient(90deg, rgba(15, 118, 110, 0.06) 0 1px, transparent 1px 100%),
+        linear-gradient(0deg, rgba(15, 118, 110, 0.06) 0 1px, transparent 1px 100%),
+        #f9faf8;
+      background-size: 32px 32px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 16px 14px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 12px;
+      color: #34434c;
+    }
+
+    .swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    aside {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .side-panel,
+    .info-panel {
+      padding: 14px;
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .panel-title h2 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .panel-title span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--front);
+    }
+
+    .time-readout {
+      min-width: 64px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
+      color: #23313a;
+    }
+
+    .object-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .object-row {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid #edf0f2;
+    }
+
+    .object-row:last-child {
+      border-bottom: 0;
+    }
+
+    .object-name {
+      font-weight: 650;
+      font-size: 13px;
+    }
+
+    .object-meta {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .gain {
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      color: #293741;
+    }
+
+    .constraint-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfcfb;
+      min-height: 64px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .metric-value {
+      margin-top: 5px;
+      font-size: 16px;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .keyframes {
+      max-height: 260px;
+      overflow: auto;
+      border-top: 1px solid var(--line);
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+
+    .keyframe-row {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 9px;
+      padding: 7px 0;
+      font-size: 12px;
+      border-bottom: 1px solid #edf0f2;
+    }
+
+    .keyframe-row:last-child {
+      border-bottom: 0;
+    }
+
+    .tick {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width: 980px) {
+      header,
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        align-items: start;
+      }
+
+      .status-strip {
+        justify-content: start;
+        grid-template-columns: repeat(2, auto);
+      }
+
+      main {
+        padding: 12px;
+      }
+
+      .stage-panel {
+        min-height: 520px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      header {
+        padding: 18px 14px 12px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .constraint-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>CXW Edge Spatial Demo</h1>
+        <div class="subtitle">BDS scene JSON / 4 objects / 48 kHz / 20 ms frame</div>
+      </div>
+      <div class="status-strip" id="statusStrip"></div>
+    </header>
+
+    <main>
+      <section class="stage-panel">
+        <div class="toolbar">
+          <div>
+            <strong>Spatial Field</strong>
+            <small id="sceneName">cxw_edge_spatial_demo_001</small>
+          </div>
+          <label class="file-load">
+            Load scene JSON
+            <input id="fileInput" type="file" accept=".json,application/json">
+          </label>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="stageCanvas"></canvas>
+        </div>
+
+        <div class="legend" id="legend"></div>
+      </section>
+
+      <aside>
+        <section class="side-panel">
+          <div class="panel-title">
+            <h2>Timeline</h2>
+            <span id="durationLabel">2.00 s</span>
+          </div>
+          <div class="timeline">
+            <input id="timeSlider" type="range" min="0" max="96000" step="960" value="0">
+            <div class="time-readout" id="timeReadout">0.00 s</div>
+          </div>
+        </section>
+
+        <section class="side-panel">
+          <div class="panel-title">
+            <h2>Objects</h2>
+            <span id="objectCount">4 tracks</span>
+          </div>
+          <div class="object-list" id="objectList"></div>
+        </section>
+
+        <section class="info-panel">
+          <div class="panel-title">
+            <h2>BDS Encode Check</h2>
+            <span>v0 MVP</span>
+          </div>
+          <div class="constraint-grid" id="constraintGrid"></div>
+          <div class="keyframes" id="keyframes"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const sceneData = {
+      "version": 1,
+      "sample_rate": 48000,
+      "timebase": 48000,
+      "authoring_metadata": {
+        "scene_id": "cxw_edge_spatial_demo_001",
+        "duration_sec": 2.0
+      },
+      "codec_configs": [
+        { "codec_config_id": 1, "codec_id": "opus", "sample_rate": 48000, "channel_count": 2, "frame_duration_ticks": 960, "nominal_bitrate": 128000 }
+      ],
+      "tracks": [
+        { "track_id": 1, "codec_config_id": 1, "element_id": 1, "channel_count": 2, "flags": 0, "name": "bass" },
+        { "track_id": 2, "codec_config_id": 1, "element_id": 2, "channel_count": 2, "flags": 0, "name": "drums" },
+        { "track_id": 3, "codec_config_id": 1, "element_id": 3, "channel_count": 2, "flags": 0, "name": "music" },
+        { "track_id": 4, "codec_config_id": 1, "element_id": 4, "channel_count": 2, "flags": 0, "name": "vocal" }
+      ],
+      "elements": [
+        {
+          "element_id": 1,
+          "name": "bass",
+          "type": "object",
+          "semantic_tag": "bass",
+          "importance": "medium",
+          "track_ids": [1],
+          "automation": [
+            { "time_ticks": 0, "position": { "azimuth_deg": -12.0, "elevation_deg": -2.0, "distance": 0.78 }, "gain_db": -3.0 },
+            { "time_ticks": 48000, "position": { "azimuth_deg": 0.0, "elevation_deg": -2.0, "distance": 0.78 }, "gain_db": -3.0 },
+            { "time_ticks": 96000, "position": { "azimuth_deg": -16.2, "elevation_deg": -2.0, "distance": 0.78 }, "gain_db": -3.0 }
+          ]
+        },
+        {
+          "element_id": 2,
+          "name": "drums",
+          "type": "object",
+          "semantic_tag": "drums",
+          "importance": "medium",
+          "track_ids": [2],
+          "automation": [
+            { "time_ticks": 0, "position": { "azimuth_deg": -34.0, "elevation_deg": 0.0, "distance": 0.74 }, "gain_db": -1.2 },
+            { "time_ticks": 48000, "position": { "azimuth_deg": -27.0, "elevation_deg": 0.0, "distance": 0.74 }, "gain_db": -1.2 },
+            { "time_ticks": 96000, "position": { "azimuth_deg": -36.45, "elevation_deg": 0.0, "distance": 0.74 }, "gain_db": -1.2 }
+          ]
+        },
+        {
+          "element_id": 3,
+          "name": "music",
+          "type": "object",
+          "semantic_tag": "music",
+          "importance": "medium",
+          "track_ids": [3],
+          "automation": [
+            { "time_ticks": 0, "position": { "azimuth_deg": 42.0, "elevation_deg": 8.0, "distance": 0.88 }, "gain_db": -3.0 },
+            { "time_ticks": 48000, "position": { "azimuth_deg": 70.0, "elevation_deg": 12.0, "distance": 0.88 }, "gain_db": -3.0 },
+            { "time_ticks": 96000, "position": { "azimuth_deg": 32.2, "elevation_deg": 8.0, "distance": 0.88 }, "gain_db": -3.0 }
+          ]
+        },
+        {
+          "element_id": 4,
+          "name": "vocal",
+          "type": "object",
+          "semantic_tag": "vocal",
+          "importance": "high",
+          "track_ids": [4],
+          "automation": [
+            { "time_ticks": 0, "position": { "azimuth_deg": 0.0, "elevation_deg": 4.0, "distance": 0.62 }, "gain_db": 0.0 },
+            { "time_ticks": 48000, "position": { "azimuth_deg": 3.0, "elevation_deg": 5.0, "distance": 0.62 }, "gain_db": 0.0 },
+            { "time_ticks": 96000, "position": { "azimuth_deg": -1.05, "elevation_deg": 4.0, "distance": 0.62 }, "gain_db": 0.0 }
+          ]
+        }
+      ],
+      "mix_presentations": [
+        { "mix_id": 1, "name": "cxw_edge_demo", "headroom_db": 6.0, "element_ids": [1, 2, 3, 4] }
+      ]
+    };
+
+    let activeScene = sceneData;
+    const colors = {
+      bass: "#0f766e",
+      drums: "#c2410c",
+      music: "#2563eb",
+      vocal: "#b91c1c",
+      default: "#5b6470"
+    };
+    const speakers = [
+      { id: "FL", az: -45, el: 0, d: 1 },
+      { id: "FR", az: 45, el: 0, d: 1 },
+      { id: "RL", az: -135, el: 0, d: 1 },
+      { id: "RR", az: 135, el: 0, d: 1 }
+    ];
+
+    const canvas = document.getElementById("stageCanvas");
+    const ctx = canvas.getContext("2d");
+    const slider = document.getElementById("timeSlider");
+    const timeReadout = document.getElementById("timeReadout");
+    const durationLabel = document.getElementById("durationLabel");
+    const objectList = document.getElementById("objectList");
+    const constraintGrid = document.getElementById("constraintGrid");
+    const keyframesPanel = document.getElementById("keyframes");
+    const statusStrip = document.getElementById("statusStrip");
+    const legend = document.getElementById("legend");
+    const objectCount = document.getElementById("objectCount");
+    const sceneName = document.getElementById("sceneName");
+
+    function maxTick(scene) {
+      return Math.max(...scene.elements.flatMap(el => el.automation.map(k => Number(k.time_ticks))));
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function interpolate(element, tick) {
+      const keys = element.automation.slice().sort((a, b) => a.time_ticks - b.time_ticks);
+      if (tick <= keys[0].time_ticks) return keys[0];
+      if (tick >= keys[keys.length - 1].time_ticks) return keys[keys.length - 1];
+      for (let i = 0; i < keys.length - 1; i++) {
+        const a = keys[i];
+        const b = keys[i + 1];
+        if (tick >= a.time_ticks && tick <= b.time_ticks) {
+          const t = (tick - a.time_ticks) / (b.time_ticks - a.time_ticks);
+          return {
+            time_ticks: tick,
+            position: {
+              azimuth_deg: lerp(a.position.azimuth_deg, b.position.azimuth_deg, t),
+              elevation_deg: lerp(a.position.elevation_deg, b.position.elevation_deg, t),
+              distance: lerp(a.position.distance, b.position.distance, t)
+            },
+            gain_db: lerp(a.gain_db, b.gain_db, t)
+          };
+        }
+      }
+      return keys[0];
+    }
+
+    function polarToCanvas(position, width, height) {
+      const radius = Math.min(width, height) * 0.38 * Math.min(position.distance || 1, 1.2);
+      const angle = (position.azimuth_deg || 0) * Math.PI / 180;
+      return {
+        x: width / 2 + Math.sin(angle) * radius,
+        y: height / 2 - Math.cos(angle) * radius
+      };
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+
+    function drawRings(width, height) {
+      const cx = width / 2;
+      const cy = height / 2;
+      const base = Math.min(width, height) * 0.38;
+      ctx.save();
+      ctx.strokeStyle = "#d8e1df";
+      ctx.lineWidth = 1;
+      [0.33, 0.66, 1].forEach(scale => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, base * scale, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+      ctx.strokeStyle = "#bec8cd";
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - base - 18);
+      ctx.lineTo(cx, cy + base + 18);
+      ctx.moveTo(cx - base - 18, cy);
+      ctx.lineTo(cx + base + 18, cy);
+      ctx.stroke();
+      ctx.fillStyle = "#172026";
+      ctx.font = "12px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("FRONT", cx, cy - base - 24);
+      ctx.restore();
+    }
+
+    function drawSpeakers(width, height) {
+      speakers.forEach(sp => {
+        const p = polarToCanvas({ azimuth_deg: sp.az, distance: 1 }, width, height);
+        ctx.save();
+        ctx.fillStyle = sp.el > 0 ? "#b7791f" : "#172026";
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.rect(p.x - 8, p.y - 8, 16, 16);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#172026";
+        ctx.font = "11px system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(sp.id, p.x, p.y - 13);
+        ctx.restore();
+      });
+    }
+
+    function drawObjectPath(element, color, width, height) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = 0.28;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      element.automation.forEach((key, index) => {
+        const p = polarToCanvas(key.position, width, height);
+        if (index === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      });
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawObjects(width, height, tick) {
+      activeScene.elements.forEach(element => {
+        const color = colors[element.semantic_tag] || colors.default;
+        drawObjectPath(element, color, width, height);
+      });
+
+      activeScene.elements.forEach(element => {
+        const current = interpolate(element, tick);
+        const p = polarToCanvas(current.position, width, height);
+        const color = colors[element.semantic_tag] || colors.default;
+        const size = element.importance === "high" ? 12 : 10;
+
+        ctx.save();
+        ctx.fillStyle = color;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#172026";
+        ctx.font = "12px system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(element.name, p.x, p.y + size + 15);
+        ctx.restore();
+      });
+    }
+
+    function draw() {
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      const tick = Number(slider.value);
+      ctx.clearRect(0, 0, width, height);
+      drawRings(width, height);
+      drawSpeakers(width, height);
+      drawObjects(width, height, tick);
+    }
+
+    function renderStatus() {
+      const config = activeScene.codec_configs[0] || {};
+      const entries = [
+        `${activeScene.sample_rate} Hz`,
+        `${activeScene.timebase} tb`,
+        `${config.frame_duration_ticks || "-"} ticks`,
+        `${activeScene.elements.length} objects`
+      ];
+      statusStrip.innerHTML = entries.map(item => `<span class="pill">${item}</span>`).join("");
+    }
+
+    function renderObjects() {
+      const tick = Number(slider.value);
+      objectList.innerHTML = activeScene.elements.map(element => {
+        const current = interpolate(element, tick);
+        const color = colors[element.semantic_tag] || colors.default;
+        const pos = current.position;
+        return `
+          <div class="object-row">
+            <span class="swatch" style="background:${color}"></span>
+            <div>
+              <div class="object-name">${element.name}</div>
+              <div class="object-meta">az ${pos.azimuth_deg.toFixed(1)}° / el ${pos.elevation_deg.toFixed(1)}° / d ${pos.distance.toFixed(2)} m</div>
+            </div>
+            <div class="gain">${current.gain_db.toFixed(1)} dB</div>
+          </div>
+        `;
+      }).join("");
+      objectCount.textContent = `${activeScene.tracks.length} tracks`;
+    }
+
+    function renderConstraints() {
+      const config = activeScene.codec_configs[0] || {};
+      const constraints = [
+        ["sample rate", `${activeScene.sample_rate} Hz`],
+        ["timebase", `${activeScene.timebase}`],
+        ["frame", `${config.frame_duration_ticks} ticks`],
+        ["codec", `${config.codec_id || "-"}`],
+        ["bitrate", `${config.nominal_bitrate || 0} bps`],
+        ["headroom", `${activeScene.mix_presentations[0]?.headroom_db ?? "-"} dB`]
+      ];
+      constraintGrid.innerHTML = constraints.map(([label, value]) => `
+        <div class="metric">
+          <div class="metric-label">${label}</div>
+          <div class="metric-value">${value}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderKeyframes() {
+      keyframesPanel.innerHTML = activeScene.elements.flatMap(element => {
+        const color = colors[element.semantic_tag] || colors.default;
+        return element.automation.map(k => `
+          <div class="keyframe-row">
+            <div class="tick">${(k.time_ticks / activeScene.timebase).toFixed(2)} s</div>
+            <div><span class="swatch" style="background:${color}"></span> ${element.name}: ${k.position.azimuth_deg.toFixed(1)}°, ${k.position.elevation_deg.toFixed(1)}°, ${k.position.distance.toFixed(2)} m</div>
+          </div>
+        `);
+      }).join("");
+    }
+
+    function renderLegend() {
+      legend.innerHTML = activeScene.elements.map(element => {
+        const color = colors[element.semantic_tag] || colors.default;
+        return `<span class="legend-item"><span class="swatch" style="background:${color}"></span>${element.name}</span>`;
+      }).join("") + `<span class="legend-item"><span class="swatch" style="border-radius:2px;background:#172026"></span>speaker</span>`;
+    }
+
+    function renderAll() {
+      const max = maxTick(activeScene);
+      slider.max = String(max);
+      durationLabel.textContent = `${(max / activeScene.timebase).toFixed(2)} s`;
+      timeReadout.textContent = `${(Number(slider.value) / activeScene.timebase).toFixed(2)} s`;
+      sceneName.textContent = activeScene.authoring_metadata?.scene_id || "loaded_scene";
+      renderStatus();
+      renderObjects();
+      renderConstraints();
+      renderKeyframes();
+      renderLegend();
+      draw();
+    }
+
+    slider.addEventListener("input", () => {
+      timeReadout.textContent = `${(Number(slider.value) / activeScene.timebase).toFixed(2)} s`;
+      renderObjects();
+      draw();
+    });
+
+    document.getElementById("fileInput").addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          activeScene = parsed;
+          slider.value = 0;
+          renderAll();
+        } catch (error) {
+          alert(`JSON parse failed: ${error.message}`);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+    renderAll();
+    resizeCanvas();
+  </script>
+</body>
+</html>

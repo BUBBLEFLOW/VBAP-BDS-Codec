@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "sample_rate": 48000,
+  "timebase": 48000,
+  "authoring_metadata": {
+    "scene_id": "cxw_demo_call_response_4spk",
+    "sample_rate": 48000,
+    "duration_sec": 2.0,
+    "notes": "Call-and-response movement demo for four-speaker layouts"
+  },
+  "codec_configs": [
+    { "codec_config_id": 1, "codec_id": "opus", "sample_rate": 48000, "channel_count": 2, "frame_duration_ticks": 960, "nominal_bitrate": 128000 }
+  ],
+  "tracks": [
+    { "track_id": 1, "codec_config_id": 1, "element_id": 1, "channel_count": 2, "flags": 0, "name": "bass" },
+    { "track_id": 2, "codec_config_id": 1, "element_id": 2, "channel_count": 2, "flags": 0, "name": "drums" },
+    { "track_id": 3, "codec_config_id": 1, "element_id": 3, "channel_count": 2, "flags": 0, "name": "music" },
+    { "track_id": 4, "codec_config_id": 1, "element_id": 4, "channel_count": 2, "flags": 0, "name": "vocal" }
+  ],
+  "elements": [
+    {
+      "element_id": 1,
+      "name": "bass",
+      "type": "object",
+      "semantic_tag": "bass",
+      "importance": "medium",
+      "is_bed": false,
+      "track_ids": [1],
+      "default_position": { "x": 0.0, "y": 0.0, "z": 0.82, "azimuth_deg": 179.0, "elevation_deg": 0.0, "distance": 0.82 },
+      "automation": [
+        { "time_ticks": 0, "position": { "x": -0.071465, "y": 0.0, "z": 0.816881, "azimuth_deg": -175.0, "elevation_deg": 0.0, "distance": 0.82 }, "gain_db": -4.5 },
+        { "time_ticks": 48000, "position": { "x": 0.0, "y": 0.0, "z": 0.82, "azimuth_deg": 179.0, "elevation_deg": 0.0, "distance": 0.82 }, "gain_db": -4.5 },
+        { "time_ticks": 96000, "position": { "x": 0.071465, "y": 0.0, "z": 0.816881, "azimuth_deg": 175.0, "elevation_deg": 0.0, "distance": 0.82 }, "gain_db": -4.5 }
+      ]
+    },
+    {
+      "element_id": 2,
+      "name": "drums",
+      "type": "object",
+      "semantic_tag": "drums",
+      "importance": "medium",
+      "is_bed": false,
+      "track_ids": [2],
+      "default_position": { "x": -0.664464, "y": 0.0, "z": -0.309377, "azimuth_deg": -65.0, "elevation_deg": 0.0, "distance": 0.733 },
+      "automation": [
+        { "time_ticks": 0, "position": { "x": -0.664464, "y": 0.0, "z": -0.309377, "azimuth_deg": -65.0, "elevation_deg": 0.0, "distance": 0.733 }, "gain_db": -1.5 },
+        { "time_ticks": 48000, "position": { "x": 0.664464, "y": 0.0, "z": -0.309377, "azimuth_deg": 65.0, "elevation_deg": 0.0, "distance": 0.733 }, "gain_db": -1.5 },
+        { "time_ticks": 96000, "position": { "x": -0.664464, "y": 0.0, "z": -0.309377, "azimuth_deg": -65.0, "elevation_deg": 0.0, "distance": 0.733 }, "gain_db": -1.5 }
+      ]
+    },
+    {
+      "element_id": 3,
+      "name": "music",
+      "type": "object",
+      "semantic_tag": "music",
+      "importance": "medium",
+      "is_bed": false,
+      "track_ids": [3],
+      "default_position": { "x": 0.601041, "y": 0.0, "z": 0.601041, "azimuth_deg": 135.0, "elevation_deg": 0.0, "distance": 0.85 },
+      "automation": [
+        { "time_ticks": 0, "position": { "x": 0.601041, "y": 0.0, "z": 0.601041, "azimuth_deg": 135.0, "elevation_deg": 0.0, "distance": 0.85 }, "gain_db": -3.0 },
+        { "time_ticks": 48000, "position": { "x": -0.601041, "y": 0.0, "z": 0.601041, "azimuth_deg": -135.0, "elevation_deg": 0.0, "distance": 0.85 }, "gain_db": -3.0 },
+        { "time_ticks": 96000, "position": { "x": 0.601041, "y": 0.0, "z": 0.601041, "azimuth_deg": 135.0, "elevation_deg": 0.0, "distance": 0.85 }, "gain_db": -3.0 }
+      ]
+    },
+    {
+      "element_id": 4,
+      "name": "vocal",
+      "type": "object",
+      "semantic_tag": "vocal",
+      "importance": "high",
+      "is_bed": false,
+      "track_ids": [4],
+      "default_position": { "x": 0.0, "y": 0.0, "z": -0.58, "azimuth_deg": 0.0, "elevation_deg": 0.0, "distance": 0.58 },
+      "automation": [
+        { "time_ticks": 0, "position": { "x": -0.080631, "y": 0.0, "z": -0.574367, "azimuth_deg": -8.0, "elevation_deg": 0.0, "distance": 0.58 }, "gain_db": 0.0 },
+        { "time_ticks": 48000, "position": { "x": 0.0, "y": 0.0, "z": -0.58, "azimuth_deg": 0.0, "elevation_deg": 0.0, "distance": 0.58 }, "gain_db": 0.0 },
+        { "time_ticks": 96000, "position": { "x": 0.080631, "y": 0.0, "z": -0.574367, "azimuth_deg": 8.0, "elevation_deg": 0.0, "distance": 0.58 }, "gain_db": 0.0 }
+      ]
+    }
+  ],
+  "mix_presentations": [
+    { "mix_id": 1, "name": "call_response", "headroom_db": 6.0, "element_ids": [1, 2, 3, 4] }
+  ]
+}

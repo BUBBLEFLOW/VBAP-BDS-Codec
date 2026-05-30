@@ -1,0 +1,16 @@
+﻿{
+    "scene":  "C:\\Users\\25637\\Desktop\\VBAP+BDS-Codec\\cxw\\data\\cxw_demo_scene.bds.json",
+    "passed":  true,
+    "checked_at":  "2026-05-30T11:06:50",
+    "checks":  {
+                   "sample_rate_48000":  true,
+                   "timebase_48000":  true,
+                   "codec_configs":  1,
+                   "tracks":  4,
+                   "elements":  4,
+                   "mix_presentations":  1
+               },
+    "errors":  [
+
+               ]
+}

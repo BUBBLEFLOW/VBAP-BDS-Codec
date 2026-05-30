@@ -1,0 +1,92 @@
+{
+  "scene_id": "cxw_edge_spatial_demo_001",
+  "sample_rate": 48000,
+  "duration_sec": 2.0,
+  "notes": "CXW edge spatial demo generated for JUCE/BDS integration",
+  "objects": [
+    {
+      "object_id": "obj_001",
+      "label": "bass",
+      "audio_path": "juce_track_1",
+      "gain": 0.707946,
+      "spread": 0.194444,
+      "depth": 0.78,
+      "distance": 0.78,
+      "azimuth_deg": -12.0,
+      "elevation_deg": -2.0,
+      "spread_deg": 70.0,
+      "position": [-0.162171, 0.762955],
+      "trajectory": [
+        { "time_ticks": 0, "azimuth_deg": -12.0, "elevation_deg": -2.0, "distance": 0.78, "gain_db": -3.0 },
+        { "time_ticks": 48000, "azimuth_deg": 0.0, "elevation_deg": -2.0, "distance": 0.78, "gain_db": -3.0 },
+        { "time_ticks": 96000, "azimuth_deg": -16.2, "elevation_deg": -2.0, "distance": 0.78, "gain_db": -3.0 }
+      ],
+      "tags": ["bass", "generated"],
+      "mute": false,
+      "solo": false
+    },
+    {
+      "object_id": "obj_002",
+      "label": "drums",
+      "audio_path": "juce_track_2",
+      "gain": 0.870964,
+      "spread": 0.263889,
+      "depth": 0.74,
+      "distance": 0.74,
+      "azimuth_deg": -34.0,
+      "elevation_deg": 0.0,
+      "spread_deg": 95.0,
+      "position": [-0.413803, 0.613488],
+      "trajectory": [
+        { "time_ticks": 0, "azimuth_deg": -34.0, "elevation_deg": 0.0, "distance": 0.74, "gain_db": -1.2 },
+        { "time_ticks": 48000, "azimuth_deg": -27.0, "elevation_deg": 0.0, "distance": 0.74, "gain_db": -1.2 },
+        { "time_ticks": 96000, "azimuth_deg": -36.45, "elevation_deg": 0.0, "distance": 0.74, "gain_db": -1.2 }
+      ],
+      "tags": ["drums", "generated"],
+      "mute": false,
+      "solo": false
+    },
+    {
+      "object_id": "obj_003",
+      "label": "music",
+      "audio_path": "juce_track_3",
+      "gain": 0.707946,
+      "spread": 0.305556,
+      "depth": 0.88,
+      "distance": 0.88,
+      "azimuth_deg": 42.0,
+      "elevation_deg": 8.0,
+      "spread_deg": 110.0,
+      "position": [0.588835, 0.653967],
+      "trajectory": [
+        { "time_ticks": 0, "azimuth_deg": 42.0, "elevation_deg": 8.0, "distance": 0.88, "gain_db": -3.0 },
+        { "time_ticks": 48000, "azimuth_deg": 70.0, "elevation_deg": 12.0, "distance": 0.88, "gain_db": -3.0 },
+        { "time_ticks": 96000, "azimuth_deg": 32.2, "elevation_deg": 8.0, "distance": 0.88, "gain_db": -3.0 }
+      ],
+      "tags": ["music", "generated"],
+      "mute": false,
+      "solo": false
+    },
+    {
+      "object_id": "obj_004",
+      "label": "vocal",
+      "audio_path": "juce_track_4",
+      "gain": 1.0,
+      "spread": 0.116667,
+      "depth": 0.62,
+      "distance": 0.62,
+      "azimuth_deg": 0.0,
+      "elevation_deg": 4.0,
+      "spread_deg": 42.0,
+      "position": [0.0, 0.62],
+      "trajectory": [
+        { "time_ticks": 0, "azimuth_deg": 0.0, "elevation_deg": 4.0, "distance": 0.62, "gain_db": 0.0 },
+        { "time_ticks": 48000, "azimuth_deg": 3.0, "elevation_deg": 5.0, "distance": 0.62, "gain_db": 0.0 },
+        { "time_ticks": 96000, "azimuth_deg": -1.05, "elevation_deg": 4.0, "distance": 0.62, "gain_db": 0.0 }
+      ],
+      "tags": ["vocal", "generated"],
+      "mute": false,
+      "solo": false
+    }
+  ]
+}

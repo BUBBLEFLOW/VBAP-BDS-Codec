@@ -1,0 +1,24 @@
+{
+  "demos": [
+    {
+      "file": "scene_static_square_4spk.bds.json",
+      "name": "static_square",
+      "description": "Four objects stay near the four speaker quadrants for basic localization checks."
+    },
+    {
+      "file": "scene_front_focus_4spk.bds.json",
+      "name": "front_focus",
+      "description": "All objects stay near the front stage for vocal-center playback checks."
+    },
+    {
+      "file": "scene_orbit_motion_4spk.bds.json",
+      "name": "orbit_motion",
+      "description": "Objects move on the four-speaker plane for automation and interpolation checks."
+    },
+    {
+      "file": "scene_call_response_4spk.bds.json",
+      "name": "call_response",
+      "description": "Objects move in left-right and front-back call-response patterns."
+    }
+  ]
+}

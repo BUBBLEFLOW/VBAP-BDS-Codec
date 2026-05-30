@@ -1,0 +1,211 @@
+{
+  "version": 1,
+  "sample_rate": 48000,
+  "timebase": 48000,
+  "authoring_metadata": {
+    "scene_id": "cxw_edge_spatial_demo_001",
+    "sample_rate": 48000,
+    "duration_sec": 2.0,
+    "notes": "CXW edge spatial demo generated for JUCE/BDS integration",
+    "objects": [
+      {
+        "object_id": "obj_001",
+        "label": "bass",
+        "audio_path": "juce_track_1",
+        "gain": 0.707946,
+        "spread": 0.194444,
+        "depth": 0.78,
+        "distance": 0.78,
+        "azimuth_deg": -12.0,
+        "elevation_deg": -2.0,
+        "spread_deg": 70.0,
+        "position": [-0.162171, 0.762955],
+        "trajectory": [
+          { "time_ticks": 0, "azimuth_deg": -12.0, "elevation_deg": -2.0, "distance": 0.78, "gain_db": -3.0 },
+          { "time_ticks": 48000, "azimuth_deg": 0.0, "elevation_deg": -2.0, "distance": 0.78, "gain_db": -3.0 },
+          { "time_ticks": 96000, "azimuth_deg": -16.2, "elevation_deg": -2.0, "distance": 0.78, "gain_db": -3.0 }
+        ],
+        "tags": ["bass", "generated"],
+        "mute": false,
+        "solo": false
+      },
+      {
+        "object_id": "obj_002",
+        "label": "drums",
+        "audio_path": "juce_track_2",
+        "gain": 0.870964,
+        "spread": 0.263889,
+        "depth": 0.74,
+        "distance": 0.74,
+        "azimuth_deg": -34.0,
+        "elevation_deg": 0.0,
+        "spread_deg": 95.0,
+        "position": [-0.413803, 0.613488],
+        "trajectory": [
+          { "time_ticks": 0, "azimuth_deg": -34.0, "elevation_deg": 0.0, "distance": 0.74, "gain_db": -1.2 },
+          { "time_ticks": 48000, "azimuth_deg": -27.0, "elevation_deg": 0.0, "distance": 0.74, "gain_db": -1.2 },
+          { "time_ticks": 96000, "azimuth_deg": -36.45, "elevation_deg": 0.0, "distance": 0.74, "gain_db": -1.2 }
+        ],
+        "tags": ["drums", "generated"],
+        "mute": false,
+        "solo": false
+      },
+      {
+        "object_id": "obj_003",
+        "label": "music",
+        "audio_path": "juce_track_3",
+        "gain": 0.707946,
+        "spread": 0.305556,
+        "depth": 0.88,
+        "distance": 0.88,
+        "azimuth_deg": 42.0,
+        "elevation_deg": 8.0,
+        "spread_deg": 110.0,
+        "position": [0.588835, 0.653967],
+        "trajectory": [
+          { "time_ticks": 0, "azimuth_deg": 42.0, "elevation_deg": 8.0, "distance": 0.88, "gain_db": -3.0 },
+          { "time_ticks": 48000, "azimuth_deg": 70.0, "elevation_deg": 12.0, "distance": 0.88, "gain_db": -3.0 },
+          { "time_ticks": 96000, "azimuth_deg": 32.2, "elevation_deg": 8.0, "distance": 0.88, "gain_db": -3.0 }
+        ],
+        "tags": ["music", "generated"],
+        "mute": false,
+        "solo": false
+      },
+      {
+        "object_id": "obj_004",
+        "label": "vocal",
+        "audio_path": "juce_track_4",
+        "gain": 1.0,
+        "spread": 0.116667,
+        "depth": 0.62,
+        "distance": 0.62,
+        "azimuth_deg": 0.0,
+        "elevation_deg": 4.0,
+        "spread_deg": 42.0,
+        "position": [0.0, 0.62],
+        "trajectory": [
+          { "time_ticks": 0, "azimuth_deg": 0.0, "elevation_deg": 4.0, "distance": 0.62, "gain_db": 0.0 },
+          { "time_ticks": 48000, "azimuth_deg": 3.0, "elevation_deg": 5.0, "distance": 0.62, "gain_db": 0.0 },
+          { "time_ticks": 96000, "azimuth_deg": -1.05, "elevation_deg": 4.0, "distance": 0.62, "gain_db": 0.0 }
+        ],
+        "tags": ["vocal", "generated"],
+        "mute": false,
+        "solo": false
+      }
+    ]
+  },
+  "codec_configs": [
+    {
+      "codec_config_id": 1,
+      "codec_id": "opus",
+      "sample_rate": 48000,
+      "channel_count": 2,
+      "frame_duration_ticks": 960,
+      "nominal_bitrate": 128000
+    }
+  ],
+  "tracks": [
+    { "track_id": 1, "codec_config_id": 1, "element_id": 1, "channel_count": 2, "flags": 0, "name": "bass" },
+    { "track_id": 2, "codec_config_id": 1, "element_id": 2, "channel_count": 2, "flags": 0, "name": "drums" },
+    { "track_id": 3, "codec_config_id": 1, "element_id": 3, "channel_count": 2, "flags": 0, "name": "music" },
+    { "track_id": 4, "codec_config_id": 1, "element_id": 4, "channel_count": 2, "flags": 0, "name": "vocal" }
+  ],
+  "elements": [
+    {
+      "element_id": 1,
+      "name": "bass",
+      "type": "object",
+      "semantic_tag": "bass",
+      "importance": "medium",
+      "is_bed": false,
+      "track_ids": [1],
+      "default_position": {
+        "x": -0.162072,
+        "y": -0.027222,
+        "z": -0.762490,
+        "azimuth_deg": -12.0,
+        "elevation_deg": -2.0,
+        "distance": 0.78
+      },
+      "automation": [
+        { "time_ticks": 0, "position": { "x": -0.162072, "y": -0.027222, "z": -0.762490, "azimuth_deg": -12.0, "elevation_deg": -2.0, "distance": 0.78 }, "gain_db": -3.0 },
+        { "time_ticks": 48000, "position": { "x": 0.0, "y": -0.027222, "z": -0.779525, "azimuth_deg": 0.0, "elevation_deg": -2.0, "distance": 0.78 }, "gain_db": -3.0 },
+        { "time_ticks": 96000, "position": { "x": -0.217480, "y": -0.027222, "z": -0.748573, "azimuth_deg": -16.2, "elevation_deg": -2.0, "distance": 0.78 }, "gain_db": -3.0 }
+      ]
+    },
+    {
+      "element_id": 2,
+      "name": "drums",
+      "type": "object",
+      "semantic_tag": "drums",
+      "importance": "medium",
+      "is_bed": false,
+      "track_ids": [2],
+      "default_position": {
+        "x": -0.413803,
+        "y": 0.0,
+        "z": -0.613488,
+        "azimuth_deg": -34.0,
+        "elevation_deg": 0.0,
+        "distance": 0.74
+      },
+      "automation": [
+        { "time_ticks": 0, "position": { "x": -0.413803, "y": 0.0, "z": -0.613488, "azimuth_deg": -34.0, "elevation_deg": 0.0, "distance": 0.74 }, "gain_db": -1.2 },
+        { "time_ticks": 48000, "position": { "x": -0.335953, "y": 0.0, "z": -0.659345, "azimuth_deg": -27.0, "elevation_deg": 0.0, "distance": 0.74 }, "gain_db": -1.2 },
+        { "time_ticks": 96000, "position": { "x": -0.439650, "y": 0.0, "z": -0.595238, "azimuth_deg": -36.45, "elevation_deg": 0.0, "distance": 0.74 }, "gain_db": -1.2 }
+      ]
+    },
+    {
+      "element_id": 3,
+      "name": "music",
+      "type": "object",
+      "semantic_tag": "music",
+      "importance": "medium",
+      "is_bed": false,
+      "track_ids": [3],
+      "default_position": {
+        "x": 0.583104,
+        "y": 0.122472,
+        "z": -0.647603,
+        "azimuth_deg": 42.0,
+        "elevation_deg": 8.0,
+        "distance": 0.88
+      },
+      "automation": [
+        { "time_ticks": 0, "position": { "x": 0.583104, "y": 0.122472, "z": -0.647603, "azimuth_deg": 42.0, "elevation_deg": 8.0, "distance": 0.88 }, "gain_db": -3.0 },
+        { "time_ticks": 48000, "position": { "x": 0.808859, "y": 0.182962, "z": -0.294401, "azimuth_deg": 70.0, "elevation_deg": 12.0, "distance": 0.88 }, "gain_db": -3.0 },
+        { "time_ticks": 96000, "position": { "x": 0.464368, "y": 0.122472, "z": -0.737403, "azimuth_deg": 32.2, "elevation_deg": 8.0, "distance": 0.88 }, "gain_db": -3.0 }
+      ]
+    },
+    {
+      "element_id": 4,
+      "name": "vocal",
+      "type": "object",
+      "semantic_tag": "vocal",
+      "importance": "high",
+      "is_bed": false,
+      "track_ids": [4],
+      "default_position": {
+        "x": 0.0,
+        "y": 0.043249,
+        "z": -0.618490,
+        "azimuth_deg": 0.0,
+        "elevation_deg": 4.0,
+        "distance": 0.62
+      },
+      "automation": [
+        { "time_ticks": 0, "position": { "x": 0.0, "y": 0.043249, "z": -0.618490, "azimuth_deg": 0.0, "elevation_deg": 4.0, "distance": 0.62 }, "gain_db": 0.0 },
+        { "time_ticks": 48000, "position": { "x": 0.032325, "y": 0.054037, "z": -0.616794, "azimuth_deg": 3.0, "elevation_deg": 5.0, "distance": 0.62 }, "gain_db": 0.0 },
+        { "time_ticks": 96000, "position": { "x": -0.011334, "y": 0.043249, "z": -0.618386, "azimuth_deg": -1.05, "elevation_deg": 4.0, "distance": 0.62 }, "gain_db": 0.0 }
+      ]
+    }
+  ],
+  "mix_presentations": [
+    {
+      "mix_id": 1,
+      "name": "cxw_edge_demo",
+      "headroom_db": 6.0,
+      "element_ids": [1, 2, 3, 4]
+    }
+  ]
+}

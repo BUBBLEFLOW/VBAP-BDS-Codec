@@ -1,0 +1,26 @@
+{
+  "model_id": "cxw_edge_spatial_mvp_v0",
+  "target_runtime": "JUCE C++17",
+  "scope": "edge procedural spatial metadata generator",
+  "sample_rate": 48000,
+  "timebase": 48000,
+  "frame_duration_ticks": 960,
+  "duration_ticks": 96000,
+  "max_objects": 4,
+  "codec": {
+    "codec_id": "opus",
+    "channel_count": 2,
+    "nominal_bitrate": 128000
+  },
+  "inputs": [
+    { "track_id": 1, "name": "bass", "feature": "optional RMS" },
+    { "track_id": 2, "name": "drums", "feature": "optional RMS" },
+    { "track_id": 3, "name": "music", "feature": "optional RMS" },
+    { "track_id": 4, "name": "vocal", "feature": "optional RMS" }
+  ],
+  "outputs": [
+    "cxw_demo_scene.bds.json",
+    "cxw_demo_authoring.json",
+    "speaker_layout_4_0_bds.json"
+  ]
+}

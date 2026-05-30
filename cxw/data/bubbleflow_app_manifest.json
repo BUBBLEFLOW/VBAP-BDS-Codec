@@ -1,0 +1,46 @@
+{
+  "app_path": "C:/Users/25637/Desktop/VBAP+BDS-Codec/Bubbleflow Dynamic Space.app",
+  "bundle": {
+    "CFBundleExecutable": "Bubbleflow Dynamic Space",
+    "CFBundleIdentifier": "com.bubbleflow.dynamicspace",
+    "CFBundleName": "Bubbleflow Dynamic Space",
+    "CFBundleDisplayName": "Bubbleflow Dynamic Space",
+    "CFBundlePackageType": "APPL",
+    "CFBundleSignature": "????",
+    "CFBundleShortVersionString": "0.1.0",
+    "CFBundleVersion": "0.1.0",
+    "NSHighResolutionCapable": true,
+    "NSMicrophoneUsageDescription": "Bubbleflow Dynamic Space needs microphone access to capture live audio input."
+  },
+  "executable": {
+    "relative_path": "Contents/MacOS/Bubbleflow Dynamic Space",
+    "size_bytes": 15101077,
+    "magic_hex": "CA FE BA BE 00 00 00 02 01 00 00 07 00 00 00 03",
+    "format_note": "Mach-O universal/fat binary signature; inspect/run on macOS."
+  },
+  "files": [
+    { "path": "Contents/Info.plist", "size_bytes": 1015, "role": "macOS bundle metadata and app permissions" },
+    { "path": "Contents/PkgInfo", "size_bytes": 8, "role": "macOS package type marker, APPL????" },
+    { "path": "Contents/MacOS/Bubbleflow Dynamic Space", "size_bytes": 15101077, "role": "main app executable" },
+    { "path": "Contents/Resources/RecentFilesMenuTemplate.nib", "size_bytes": 2842, "role": "native macOS recent-files menu resource" },
+    { "path": "Contents/_CodeSignature/CodeResources", "size_bytes": 2476, "role": "code-signing resource hash manifest" }
+  ],
+  "directories": [
+    { "path": "Contents", "role": "bundle root content directory" },
+    { "path": "Contents/MacOS", "role": "native executable directory" },
+    { "path": "Contents/Resources", "role": "UI/resource directory" },
+    { "path": "Contents/_CodeSignature", "role": "macOS code-signing metadata" }
+  ],
+  "capabilities": [
+    { "name": "Microphone input", "status": "declared", "source": "NSMicrophoneUsageDescription" },
+    { "name": "High resolution display", "status": "declared", "source": "NSHighResolutionCapable" },
+    { "name": "Recent files menu", "status": "resource present", "source": "RecentFilesMenuTemplate.nib" },
+    { "name": "BDS export", "status": "not visible in bundle metadata", "source": "requires app/runtime inspection" }
+  ],
+  "integration_notes": [
+    "This is a macOS .app bundle, so Windows can inspect files but cannot run the app directly.",
+    "The microphone permission suggests the app is intended to capture live audio input.",
+    "The bundle metadata does not show whether bds-codec is linked; verify on macOS with otool or app logs.",
+    "The CXW demo can provide scene JSON and BDS export bridge code for this JUCE app to integrate."
+  ]
+}

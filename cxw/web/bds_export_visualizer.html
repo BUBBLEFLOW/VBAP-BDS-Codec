@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CXW BDS Export Visualizer</title>
+  <style>
+    :root {
+      --bg: #f5f7f6;
+      --panel: #ffffff;
+      --ink: #172026;
+      --muted: #65727b;
+      --line: #d7dee2;
+      --green: #0f766e;
+      --blue: #2563eb;
+      --red: #b91c1c;
+      --gold: #b7791f;
+      --graph: #e9eeec;
+      --shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      padding: 20px 24px 14px;
+      background: #fbfcfb;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: end;
+    }
+
+    .badge {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(520px, 1fr) 390px;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .graph-panel {
+      display: grid;
+      grid-template-rows: auto minmax(440px, 1fr);
+      min-height: 650px;
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      align-items: center;
+    }
+
+    .toolbar strong {
+      font-size: 14px;
+    }
+
+    .toolbar span {
+      color: var(--muted);
+      display: block;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    input[type="file"] {
+      font-size: 12px;
+      max-width: 210px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background:
+        linear-gradient(90deg, rgba(15, 118, 110, 0.045) 0 1px, transparent 1px),
+        linear-gradient(0deg, rgba(15, 118, 110, 0.045) 0 1px, transparent 1px),
+        #fafbf9;
+      background-size: 28px 28px;
+    }
+
+    aside {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .side {
+      padding: 14px;
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 15px;
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .title-row span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .metric {
+      background: #fbfcfb;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 62px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .metric-value {
+      font-size: 16px;
+      font-weight: 750;
+      margin-top: 5px;
+      font-variant-numeric: tabular-nums;
+      overflow-wrap: anywhere;
+    }
+
+    .track-list,
+    .call-list {
+      display: grid;
+      gap: 7px;
+      max-height: 330px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .track,
+    .call {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 9px;
+      align-items: center;
+      border-bottom: 1px solid #edf0f2;
+      padding: 8px 0;
+    }
+
+    .track:last-child,
+    .call:last-child {
+      border-bottom: 0;
+    }
+
+    .num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 750;
+      color: #fff;
+      background: var(--green);
+    }
+
+    .call .num {
+      background: var(--blue);
+    }
+
+    .name {
+      font-weight: 650;
+      font-size: 13px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 980px) {
+      header,
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .badges {
+        justify-content: start;
+      }
+
+      main {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>CXW BDS Export Visualizer</h1>
+      <div class="sub">JUCE C++ track PCM + BDS scene JSON -> bds-codec -> .bds</div>
+    </div>
+    <div class="badges" id="badges"></div>
+  </header>
+
+  <main>
+    <section class="panel graph-panel">
+      <div class="toolbar">
+        <div>
+          <strong id="planName">cxw_bds_export_plan_v0</strong>
+          <span id="condition">CXW_HAS_BDS_CODEC gated real export</span>
+        </div>
+        <input id="fileInput" type="file" accept=".json,application/json">
+      </div>
+      <canvas id="pipelineCanvas"></canvas>
+    </section>
+
+    <aside>
+      <section class="panel side">
+        <div class="title-row">
+          <h2>Format</h2>
+          <span>BDS v0</span>
+        </div>
+        <div class="metrics" id="metrics"></div>
+      </section>
+
+      <section class="panel side">
+        <div class="title-row">
+          <h2>PCM Tracks</h2>
+          <span id="trackCount">4 tracks</span>
+        </div>
+        <div class="track-list" id="trackList"></div>
+      </section>
+
+      <section class="panel side">
+        <div class="title-row">
+          <h2>bds-codec Calls</h2>
+          <span>export order</span>
+        </div>
+        <div class="call-list" id="callList"></div>
+      </section>
+    </aside>
+  </main>
+
+  <script>
+    let plan = {
+      "plan_id": "cxw_bds_export_plan_v0",
+      "target_app": "JUCE audio app",
+      "language": "C++17",
+      "real_bds_export_condition": "Build with -DCXW_HAS_BDS_CODEC=ON and provide a platform-matched bds-codec package.",
+      "inputs": {
+        "scene_json": "cxw/data/cxw_demo_scene.bds.json",
+        "speaker_layout": "cxw/data/speaker_layout_4_0_bds.json",
+        "pcm_tracks": [
+          { "track_id": 1, "name": "bass", "layout": "interleaved_f32", "sample_rate": 48000, "channel_count": 2 },
+          { "track_id": 2, "name": "drums", "layout": "interleaved_f32", "sample_rate": 48000, "channel_count": 2 },
+          { "track_id": 3, "name": "music", "layout": "interleaved_f32", "sample_rate": 48000, "channel_count": 2 },
+          { "track_id": 4, "name": "vocal", "layout": "interleaved_f32", "sample_rate": 48000, "channel_count": 2 }
+        ]
+      },
+      "bds_codec_calls": [
+        { "order": 1, "call": "bds::scene_json::parse(sceneJson, &scene, &error)", "purpose": "parse BDS scene JSON" },
+        { "order": 2, "call": "bds::validateScene(scene, &error)", "purpose": "verify track/element/mix references" },
+        { "order": 3, "call": "bds::EncodeSession encoder", "purpose": "create encoder" },
+        { "order": 4, "call": "encoder.setScene(scene)", "purpose": "bind scene metadata" },
+        { "order": 5, "call": "encoder.setTrackPcm(trackId, pcm, frameCount, 48000, 2)", "purpose": "push each stereo stem" },
+        { "order": 6, "call": "encoder.finish(outputPath)", "purpose": "write BDS container" }
+      ],
+      "outputs": {
+        "real_file": "cxw_demo.bds",
+        "dry_run_bundle": "bds_export_dryrun/",
+        "dry_run_manifest": "bds_export_manifest.json"
+      },
+      "bds_format_constraints": {
+        "sample_rate": 48000,
+        "timebase": 48000,
+        "codec_id": "opus",
+        "frame_duration_ticks": 960,
+        "frame_duration_ms": 20,
+        "nominal_bitrate": 128000,
+        "track_count": 4,
+        "speaker_count_for_preview": 4
+      }
+    };
+
+    const canvas = document.getElementById("pipelineCanvas");
+    const ctx = canvas.getContext("2d");
+    const metrics = document.getElementById("metrics");
+    const trackList = document.getElementById("trackList");
+    const callList = document.getElementById("callList");
+    const badges = document.getElementById("badges");
+    const trackCount = document.getElementById("trackCount");
+    const planName = document.getElementById("planName");
+    const condition = document.getElementById("condition");
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+
+    function box(x, y, w, h, title, lines, color) {
+      ctx.save();
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, 8);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = color;
+      ctx.font = "700 14px system-ui, sans-serif";
+      ctx.fillText(title, x + 14, y + 24);
+      ctx.fillStyle = "#33424b";
+      ctx.font = "12px system-ui, sans-serif";
+      lines.forEach((line, index) => {
+        ctx.fillText(line, x + 14, y + 48 + index * 18);
+      });
+      ctx.restore();
+    }
+
+    function arrow(x1, y1, x2, y2, color) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      const angle = Math.atan2(y2 - y1, x2 - x1);
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - 9 * Math.cos(angle - Math.PI / 6), y2 - 9 * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(x2 - 9 * Math.cos(angle + Math.PI / 6), y2 - 9 * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function draw() {
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const left = 28;
+      const top = 34;
+      const columnW = Math.max(180, (w - 96) / 3);
+      const stageH = Math.min(150, h * 0.28);
+      const gap = 20;
+
+      box(left, top, columnW, stageH, "JUCE Inputs", [
+        "4 x stereo float tracks",
+        plan.inputs.scene_json,
+        plan.inputs.speaker_layout
+      ], "#0f766e");
+
+      box(left + columnW + gap, top, columnW, stageH, "BDS ExportBridge", [
+        "validate tracks",
+        "parse scene JSON",
+        "EncodeSession adapter"
+      ], "#2563eb");
+
+      box(left + 2 * (columnW + gap), top, columnW, stageH, "Outputs", [
+        plan.outputs.real_file,
+        plan.outputs.dry_run_bundle,
+        plan.outputs.dry_run_manifest
+      ], "#b91c1c");
+
+      arrow(left + columnW, top + stageH / 2, left + columnW + gap, top + stageH / 2, "#50616b");
+      arrow(left + 2 * columnW + gap, top + stageH / 2, left + 2 * (columnW + gap), top + stageH / 2, "#50616b");
+
+      const callTop = top + stageH + 48;
+      const rowH = 48;
+      const callW = Math.min(w - 56, 820);
+      const callX = (w - callW) / 2;
+
+      ctx.save();
+      ctx.fillStyle = "#172026";
+      ctx.font = "700 14px system-ui, sans-serif";
+      ctx.fillText("bds-codec call chain", callX, callTop - 16);
+      ctx.restore();
+
+      plan.bds_codec_calls.forEach((call, index) => {
+        const y = callTop + index * rowH;
+        ctx.save();
+        ctx.fillStyle = index % 2 === 0 ? "#ffffff" : "#fbfcfb";
+        ctx.strokeStyle = "#d7dee2";
+        ctx.beginPath();
+        ctx.roundRect(callX, y, callW, 38, 8);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#2563eb";
+        ctx.font = "700 12px system-ui, sans-serif";
+        ctx.fillText(String(call.order), callX + 14, y + 24);
+        ctx.fillStyle = "#172026";
+        ctx.font = "12px ui-monospace, SFMono-Regular, Consolas, monospace";
+        ctx.fillText(call.call, callX + 42, y + 24);
+        ctx.restore();
+      });
+    }
+
+    function render() {
+      const c = plan.bds_format_constraints;
+      planName.textContent = plan.plan_id;
+      condition.textContent = plan.real_bds_export_condition;
+      badges.innerHTML = [
+        plan.target_app,
+        plan.language,
+        `${c.sample_rate} Hz`,
+        `${c.track_count} tracks`
+      ].map(v => `<span class="badge">${v}</span>`).join("");
+
+      metrics.innerHTML = [
+        ["codec", c.codec_id],
+        ["frame", `${c.frame_duration_ticks} ticks`],
+        ["timebase", c.timebase],
+        ["speakers", c.speaker_count_for_preview],
+        ["bitrate", `${c.nominal_bitrate} bps`],
+        ["real file", plan.outputs.real_file]
+      ].map(([label, value]) => `
+        <div class="metric">
+          <div class="metric-label">${label}</div>
+          <div class="metric-value">${value}</div>
+        </div>
+      `).join("");
+
+      trackCount.textContent = `${plan.inputs.pcm_tracks.length} tracks`;
+      trackList.innerHTML = plan.inputs.pcm_tracks.map(track => `
+        <div class="track">
+          <div class="num">${track.track_id}</div>
+          <div>
+            <div class="name">${track.name}</div>
+            <div class="meta">${track.layout} / ${track.sample_rate} Hz / ${track.channel_count} ch</div>
+          </div>
+        </div>
+      `).join("");
+
+      callList.innerHTML = plan.bds_codec_calls.map(call => `
+        <div class="call">
+          <div class="num">${call.order}</div>
+          <div>
+            <div class="name">${call.purpose}</div>
+            <div class="meta">${call.call}</div>
+          </div>
+        </div>
+      `).join("");
+
+      draw();
+    }
+
+    document.getElementById("fileInput").addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          plan = JSON.parse(reader.result);
+          render();
+          resizeCanvas();
+        } catch (error) {
+          alert(`JSON parse failed: ${error.message}`);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+    render();
+    resizeCanvas();
+  </script>
+</body>
+</html>
